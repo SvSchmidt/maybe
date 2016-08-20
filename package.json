@@ -1,0 +1,32 @@
+{
+  "name": "maybe",
+  "version": "1.0.0",
+  "description": "A simple library providing Maybe Monads for JavaScript",
+  "main": "src/maybe.js",
+  "scripts": {
+    "test": "grunt test",
+    "build": "grunt"
+  },
+  "author": "Sven Schmidt",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.13.2",
+    "babelify": "^7.3.0",
+    "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
+    "grunt-banner": "^0.6.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-file-info": "^1.0.12",
+    "grunt-mocha-cli": "^2.1.0",
+    "load-grunt-tasks": "^3.5.2"
+  }
+}
