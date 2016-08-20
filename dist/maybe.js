@@ -45,6 +45,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return target;
     }
 
+    function __copy(obj) {
+        return __assign({}, obj);
+    }
+
     /**
      * Maybe - Constructor function
      *
@@ -266,7 +270,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             apply: apply, toString: toString, join: join
         };
     }();
-    MaybeFunction.prototype = __assign(__assign({}, Maybe.prototype), MaybeFunction.prototype);
+    MaybeFunction.prototype = __assign(__copy(Maybe.prototype), MaybeFunction.prototype);
 
     // Return kind of a proxy to allow three ways to create Maybes:
     // [1] Maybe(value)

@@ -20,7 +20,7 @@
         // use Symbol for saving the value in a private way
         const __value = Symbol('value');
 
-        function __assign(target, origin) {
+        function __assign (target, origin) {
             target = Object(target);
 
             Object.keys(origin).forEach(k => {
@@ -31,6 +31,10 @@
             });
 
             return target;
+        }
+
+        function __copy (obj) {
+            return __assign({}, obj);
         }
 
         /**
@@ -252,7 +256,7 @@
                 apply, toString, join
             }
         }());
-        MaybeFunction.prototype = __assign(__assign({}, Maybe.prototype), MaybeFunction.prototype);
+        MaybeFunction.prototype = __assign(__copy(Maybe.prototype), MaybeFunction.prototype);
 
         // Return kind of a proxy to allow three ways to create Maybes:
         // [1] Maybe(value)
