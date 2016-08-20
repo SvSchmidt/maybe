@@ -22,7 +22,7 @@ import Maybe = require('maybe');
 const Maybe = require('maybe');
 ```
 
-#### Using the good old <script>-tag
+#### Using the good old `<script>`-tag
 ```
 <script src='maybe.min.js'></script>
 ```
