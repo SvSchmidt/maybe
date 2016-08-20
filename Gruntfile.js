@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         options: {
           position: 'top',
           banner: banner,
-          linebreak: true,
+          linebreak: true
         },
         files: {
           dist: [ 'dist/*.js' ]
