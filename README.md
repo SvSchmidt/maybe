@@ -9,7 +9,51 @@ Offering the mysterious _Maybe Monad_ for JavaScript.
 * [Contribution](#contribution)
 
 ## Why?
-Coming soon
+Imagine a function returning the initials of a person:
+```js
+function getInitials (user) {
+    return user.person.name.split(' ').map(x => x[0].toUpperCase()).join('');
+}
+let jon = {
+  id: 1,
+  ...
+  person: {
+    name: 'Jon Doe',
+  }
+}
+getInitials(jon) // JD
+```
+But there may be users without person (because it's some kind of system user without an associated person), you rewrite your code as follows:
+
+```js
+function getInitials (user) {
+    if (user.person && user.person.name) {
+        return user.person.name.split(' ').map(x => x[0].toUpperCase()).join('');
+    }
+    return '??';
+}
+```
+Because of some bad service logic, your user may also be null. You rewrite your code another time:
+```js
+function getInitials (user) {
+    if (user && user.person && user.person.name) {
+        return user.person.name.split(' ').map(x => x[0].toUpperCase()).join('');
+    }
+    return '??';
+}
+```
+Doesn't get any better, does it? Checks for non-existing (undefined) or null-values in JavaScript is an exhausting part of ones everyday workflow. The _Maybe Monad_ offers a Wrapper for values hence you can skip these checks for non-existing values.
+```js
+function getInitials (user) {
+  return Maybe.of(user)
+        .get(['person', 'name'])
+        .orDefault('? ?')
+        .chain(x => x.split(' ').map(n => n[0].toUpperCase()).join(''));
+}
+getInitials(user) // 'JD'
+getInitials(null) // '??'
+getInitials({ id: 1 }) // '??'
+```
 
 ## Getting started
 There are three ways supported for using Maybe:
@@ -22,7 +66,7 @@ import Maybe = require('maybe');
 const Maybe = require('maybe');
 ```
 
-#### Using the good old <script>-tag
+#### Using the good old `<script>`-tag
 ```
 <script src='maybe.min.js'></script>
 ```
@@ -32,12 +76,6 @@ const Maybe = require('maybe');
 ### `Maybe.of(val)`
 Works as the factory function of the library. Returns a Maybe as a wrapper for the provided value, which may either be some JavaScript primitive value or complex objects. If passed a function, Maybe.of will return a MaybeFunction with additional methods.
 
-### `Maybe(val)`
-Alternative to `Maybe.of`.
-
-### `new Maybe(val)`
-Alternative to `Maybe.of`.
-
 ```js
 const Maybe = require('maybe');
 
@@ -46,6 +84,12 @@ new Maybe(...);
 Maybe.of(...);
 Maybe(...);
 ```
+
+### `Maybe(val)`
+Alternative to `Maybe.of`.
+
+### `new Maybe(val)`
+Alternative to `Maybe.of`.
 
 ### `maybe.value()`
 Returns the value wrapped by the Maybe if it is present or `Maybe.nothing` if it is not.
