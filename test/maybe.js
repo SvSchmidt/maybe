@@ -139,7 +139,12 @@ describe('Maybe', function() {
    });
 
    describe('MaybeFunction', function () {
-      describe('apply', function () {
+       it('should become executed by .value() if it does not take arguments or number of arguments does not match, else return the wrapped function itself', function () {
+           expect(Maybe.of(() => 4).join()).to.be.equal(4);
+           expect(typeof Maybe.of(x => 4).join()).to.be.equal('function');
+       });
+
+       describe('apply', function () {
          it('should always return a new Maybe', function () {
             expect(Maybe.of(x => 2 * x).apply(Maybe.of(2))).to.be.deep.equal(Maybe.of(4));
             expect(Maybe.of(x => 2 * x).apply(Maybe.of(undefined))).to.be.deep.equal(Maybe.of(NaN));
@@ -147,6 +152,7 @@ describe('Maybe', function() {
 
          it('should accept more than one argument', function () {
             expect(Maybe.of((x, y) => x + y).apply(Maybe.of(2), Maybe.of(2))).to.be.deep.equal(Maybe.of(4));
+            expect(Maybe.of((x, y, z) => x + y + z).apply(Maybe.of(2), Maybe.of(2), Maybe.of(3))).to.be.deep.equal(Maybe.of(6));
          });
 
          it('should accept Maybe and non-Maybe arguments', function () {

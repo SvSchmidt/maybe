@@ -207,6 +207,26 @@
             }
 
             /**
+             * join
+             *
+             * @override
+             * @see Maybe#join
+             */
+            function join () {
+                if (this.isNothing()) {
+                    return Maybe.nothing;
+                }
+
+                const v = this[__value];
+
+                if (v.length === 0 /* does not accept arguments */) {
+                    return v();
+                } else {
+                    return v;
+                }
+            }
+
+            /**
              * toString - toString method
              *
              * @override
@@ -216,10 +236,10 @@
             }
 
             return {
-                apply, toString
+                apply, toString, join
             }
         }());
-        MaybeFunction.prototype = Object.assign.call({}, Maybe.prototype, MaybeFunction.prototype);
+        MaybeFunction.prototype = Object.assign(Object.assign({}, Maybe.prototype), MaybeFunction.prototype);
 
         // Return kind of a proxy to allow three ways to create Maybes:
         // [1] Maybe(value)

@@ -221,6 +221,26 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         /**
+         * join
+         *
+         * @override
+         * @see Maybe#join
+         */
+        function join() {
+            if (this.isNothing()) {
+                return Maybe.nothing;
+            }
+
+            var v = this[__value];
+
+            if (v.length === 0 /* does not accept arguments */) {
+                    return v();
+                } else {
+                return v;
+            }
+        }
+
+        /**
          * toString - toString method
          *
          * @override
@@ -230,10 +250,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         return {
-            apply: apply, toString: toString
+            apply: apply, toString: toString, join: join
         };
     }();
-    MaybeFunction.prototype = Object.assign.call({}, Maybe.prototype, MaybeFunction.prototype);
+    MaybeFunction.prototype = Object.assign(Object.assign({}, Maybe.prototype), MaybeFunction.prototype);
 
     // Return kind of a proxy to allow three ways to create Maybes:
     // [1] Maybe(value)
