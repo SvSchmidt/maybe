@@ -35,9 +35,9 @@ module.exports = function (grunt) {
         src: ['dist/maybe.js', 'dist/maybe.min.js', 'src/maybe.js'],
         options: {
             stdout: 'maybe.js' + grunt.util.linefeed +
-                    'src:      {{= size(src[2])/1000 }} kB' + grunt.util.linefeed +
-                    'dist:     {{= size(src[0])/1000 }} kB' + grunt.util.linefeed +
-                    'Minified: {{= size(src[1])/1000 }} kB' + grunt.util.linefeed
+                    'src:      {{= Number(size(src[2])/1024).toFixed(2) }} kB' + grunt.util.linefeed +
+                    'dist:     {{= Number(size(src[0])/1024).toFixed(2) }} kB' + grunt.util.linefeed +
+                    'Minified: {{= Number(size(src[1])/1024).toFixed(2) }} kB' + grunt.util.linefeed
         }
       }
     },
