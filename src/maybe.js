@@ -8,7 +8,7 @@
     // [3] good old <script>-tag
     if (typeof define === 'function' && define['amd']) {
         // AMD asynchronous module definition (e.g. requirejs)
-        define(['exports', 'require'], function () { return Maybe; });
+        define('Maybe', function () { return Maybe; });
     } else if (typeof exports === 'object' && typeof module === 'object') {
         // CommonJS/Node.js where module.exports is for nodejs
         exports = module.exports = Maybe;
@@ -215,10 +215,6 @@
              * @return {Maybe}         new Maybe of the return value of the operation
              */
             function apply (...args) {
-                if (this.isNothing()) {
-                    return Maybe.nothing;
-                }
-
                 return Maybe.of(this[__value].apply(this[__value],
                     args.map(x => Maybe.of(x).join())));
             }

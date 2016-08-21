@@ -18,7 +18,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // [3] good old <script>-tag
     if (typeof define === 'function' && define['amd']) {
         // AMD asynchronous module definition (e.g. requirejs)
-        define(['exports', 'require'], function () {
+        define('Maybe', function () {
             return Maybe;
         });
     } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && (typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object') {
@@ -224,10 +224,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * @return {Maybe}         new Maybe of the return value of the operation
          */
         function apply() {
-            if (this.isNothing()) {
-                return Maybe.nothing;
-            }
-
             for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
                 args[_key] = arguments[_key];
             }

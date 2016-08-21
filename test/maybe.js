@@ -1,3 +1,5 @@
+'use strict';
+
 const expect = require('chai').expect;
 let Maybe = require('../');
 
@@ -96,6 +98,20 @@ describe('Maybe', function() {
       });
    });
 
+   describe('value', function () {
+      it('should behave the same as join', function () {
+         const nothing = Maybe.nothing;
+
+         expect(Maybe.of(undefined).value()).to.be.deep.equal(Maybe.of(undefined).join());
+         expect(Maybe.of(null).value()).to.be.deep.equal(Maybe.of(null).join());
+         expect(Maybe.of(NaN).value()).to.be.deep.equal(Maybe.of(NaN).join());
+
+         expect(Maybe.of(0).value()).to.be.deep.equal(Maybe.of(0).join());
+         expect(Maybe.of("").value()).to.be.deep.equal(Maybe.of("").join());
+         expect(Maybe.of("hallo welt").value()).to.be.deep.equal(Maybe.of("hallo welt").join());
+      });
+   });
+
    describe('get', function () {
        const user = {
            name: 'sven',
@@ -144,33 +160,59 @@ describe('Maybe', function() {
        });
    })
 
+   describe('or', function () {
+       it('should behave the same as orDefault', function () {
+          expect(Maybe.of(null).or(1)).to.be.deep.equal(Maybe.of(null).orDefault(1));
+       });
+   })
+
+   describe('map', function () {
+      it ('should transform wrapped value', function () {
+          expect(Maybe.of(1).map(x => 2 * x)).to.be.deep.equal(Maybe.of(2));
+          expect(Maybe.of(1).map(x => 2 * x).map(x => 3 * x)).to.be.deep.equal(Maybe.of(6));
+      });
+
+      it ('should return Maybe.nothing if some mapped value was null/NaN/undefined', function () {
+          expect(Maybe.of(1).map(x => x * "foo")).to.be.deep.equal(Maybe.nothing);
+          expect(Maybe.of(1).map(x => x * "foo").map(x => 3 * x)).to.be.deep.equal(Maybe.nothing);
+      });
+   });
+
    describe('chain', function () {
        it ('should do the same than calling map and then join', function () {
             expect(Maybe.of(1).chain(x => 2 * x)).to.be.deep.equal(Maybe.of(1).map(x => 2 * x).join());
        });
    });
 
-   describe('MaybeFunction', function () {
-       it('should become executed by .value() if it does not take arguments or number of arguments does not match, else return the wrapped function itself', function () {
-           expect(Maybe.of(() => 4).join()).to.be.equal(4);
-           expect(typeof Maybe.of(x => 4).join()).to.be.equal('function');
-       });
+   it('toString() should be [object Maybe]', function () {
+       expect(Maybe.of(1).toString()).to.be.equal('[object Maybe]');
+   });
+});
 
-       describe('apply', function () {
-         it('should always return a new Maybe', function () {
-            expect(Maybe.of(x => 2 * x).apply(Maybe.of(2))).to.be.deep.equal(Maybe.of(4));
-            expect(Maybe.of(x => 2 * x).apply(Maybe.of(undefined))).to.be.deep.equal(Maybe.of(NaN));
-         });
+describe('MaybeFunction', function () {
+    it('should become executed by .value() if it does not take arguments or number of arguments does not match, else return the wrapped function itself', function () {
+        expect(Maybe.of(() => 4).join()).to.be.equal(4);
+        expect(typeof Maybe.of(x => 4).join()).to.be.equal('function');
+    });
 
-         it('should accept more than one argument', function () {
-            expect(Maybe.of((x, y) => x + y).apply(Maybe.of(2), Maybe.of(2))).to.be.deep.equal(Maybe.of(4));
-            expect(Maybe.of((x, y, z) => x + y + z).apply(Maybe.of(2), Maybe.of(2), Maybe.of(3))).to.be.deep.equal(Maybe.of(6));
-         });
+    describe('apply', function () {
+      it('should always return a new Maybe', function () {
+         expect(Maybe.of(x => 2 * x).apply(Maybe.of(2))).to.be.deep.equal(Maybe.of(4));
+         expect(Maybe.of(x => 2 * x).apply(Maybe.of(undefined))).to.be.deep.equal(Maybe.of(NaN));
+      });
 
-         it('should accept Maybe and non-Maybe arguments', function () {
-            expect(Maybe.of(x => 2 * x).apply(2)).to.be.deep.equal(Maybe.of(4));
-            expect(Maybe.of((x, y) => x + y).apply(2, Maybe.of(4))).to.be.deep.equal(Maybe.of(6));
-         });
+      it('should accept more than one argument', function () {
+         expect(Maybe.of((x, y) => x + y).apply(Maybe.of(2), Maybe.of(2))).to.be.deep.equal(Maybe.of(4));
+         expect(Maybe.of((x, y, z) => x + y + z).apply(Maybe.of(2), Maybe.of(2), Maybe.of(3))).to.be.deep.equal(Maybe.of(6));
+      });
+
+      it('should accept Maybe and non-Maybe arguments', function () {
+         expect(Maybe.of(x => 2 * x).apply(2)).to.be.deep.equal(Maybe.of(4));
+         expect(Maybe.of((x, y) => x + y).apply(2, Maybe.of(4))).to.be.deep.equal(Maybe.of(6));
+      });
+
+      it('toString() should be [object MaybeFunction]', function () {
+          expect(Maybe.of(x => 2 * x).toString()).to.be.equal('[object MaybeFunction]');
       });
    });
 });
