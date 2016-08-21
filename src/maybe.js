@@ -1,7 +1,6 @@
 (function (Maybe) {
     // (0, eval)('this') is a robust way for getting a reference to the global object
     const global = this || (0, eval)('this');
-    const isObject = o => /obj/i.test({}.toString.call(o));
 
     // Support three ways to load the module
     // [1] AMD modules
@@ -10,7 +9,7 @@
     if (typeof define === 'function' && define['amd']) {
         // AMD asynchronous module definition (e.g. requirejs)
         define(['exports', 'require'], function () { return Maybe; });
-    } else if (isObject(exports) && isObject(module)) {
+    } else if (typeof exports === 'object' && typeof module === 'object') {
         // CommonJS/Node.js where module.exports is for nodejs
         exports = module.exports = Maybe;
     } else {

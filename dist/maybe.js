@@ -6,13 +6,11 @@
 
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 (function (Maybe) {
     // (0, eval)('this') is a robust way for getting a reference to the global object
     var global = this || (0, eval)('this');
-    var isObject = function isObject(o) {
-        return (/obj/i.test({}.toString.call(o))
-        );
-    };
 
     // Support three ways to load the module
     // [1] AMD modules
@@ -23,7 +21,7 @@
         define(['exports', 'require'], function () {
             return Maybe;
         });
-    } else if (isObject(exports) && isObject(module)) {
+    } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && (typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object') {
         // CommonJS/Node.js where module.exports is for nodejs
         exports = module.exports = Maybe;
     } else {
