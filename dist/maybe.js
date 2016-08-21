@@ -240,10 +240,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * @see Maybe#join
          */
         function join() {
-            if (this.isNothing()) {
-                return Maybe.nothing;
-            }
-
             var v = this[__value];
 
             if (v.length === 0 /* does not accept arguments */) {

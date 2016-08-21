@@ -1,7 +1,7 @@
 'use strict';
 
 const expect = require('chai').expect;
-let Maybe = require('../');
+let Maybe = require('../dist/maybe');
 
 if (process.env.MAYBE_COV) {
     describe('Test coverage', function () {
@@ -9,7 +9,7 @@ if (process.env.MAYBE_COV) {
               require('child_process').exec('$(npm root)/.bin/jscoverage dist dist-cov', done);
         });
 
-        it('should load module', function () {
+        it('should load coverage module', function () {
             Maybe = require('../dist-cov/maybe');
         });
     });
