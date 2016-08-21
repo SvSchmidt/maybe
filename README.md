@@ -1,4 +1,4 @@
-# Maybe [![Build Status](https://api.travis-ci.org/SvSchmidt/maybe.png)](https://travis-ci.org/SvSchmidt/maybe)
+# Maybe [![Build Status](https://api.travis-ci.org/SvSchmidt/maybe.png)](https://travis-ci.org/SvSchmidt/maybe) [![Coverage Status](https://coveralls.io/repos/github/SvSchmidt/maybe/badge.svg)](https://coveralls.io/github/SvSchmidt/maybe)
 
 Offering the mysterious _Maybe Monad_ for JavaScript.
 
