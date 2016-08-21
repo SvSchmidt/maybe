@@ -226,10 +226,6 @@
              * @see Maybe#join
              */
             function join () {
-                if (this.isNothing()) {
-                    return Maybe.nothing;
-                }
-
                 const v = this[__value];
 
                 if (v.length === 0 /* does not accept arguments */) {
