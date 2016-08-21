@@ -1,5 +1,17 @@
 const expect = require('chai').expect;
-const Maybe = require('../dist/maybe');
+let Maybe = require('../');
+
+if (process.env.MAYBE_COV) {
+    describe('Test coverage', function () {
+        it('should generate instrumentation', function (done) {
+              require('child_process').exec('$(npm root)/.bin/jscoverage dist dist-cov', done);
+        });
+
+        it('should load module', function () {
+            Maybe = require('../lib-cov/maybe');
+        });
+    });
+}
 
 describe('Maybe', function() {
    describe ('construction', function () {
