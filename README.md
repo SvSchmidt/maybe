@@ -9,51 +9,73 @@ Offering the mysterious _Maybe Monad_ for JavaScript.
 * [Contribution](#contribution)
 
 ## Why?
-Imagine a function returning the initials of a person:
+Imagine a function returning the user currently logged in along with some details (e.g. the profile picture):
 ```js
-function getInitials (user) {
-    return user.person.name.split(' ').map(x => x[0].toUpperCase()).join('');
+function getUser () {
+    return {
+        name: 'Jon Doe',
+        email: 'jon@example.com',
+        getProfilePicture: function () {
+            return {
+                title: 'fancy cat',
+                url: 'jon.jpg',
+                extension: '.jpg',
+            };
+        },
+    };
 }
-let jon = {
-  id: 1,
-  ...
-  person: {
-    name: 'Jon Doe',
-  }
-}
-getInitials(jon) // JD
 ```
-But there may be users without person (because it's some kind of system user without an associated person), you rewrite your code as follows:
+Now we can access the profile picture as follows, e.g. to display it somewhere on the page:
 
 ```js
-function getInitials (user) {
-    if (user.person && user.person.name) {
-        return user.person.name.split(' ').map(x => x[0].toUpperCase()).join('');
-    }
-    return '??';
-}
+let avatar = getUser() .getProfilePicture().url;
 ```
-Because of some bad service logic, your user may also be null. You rewrite your code another time:
+In some cases, the user may not have an avatar, such as he just registered.
 ```js
-function getInitials (user) {
-    if (user && user.person && user.person.name) {
-        return user.person.name.split(' ').map(x => x[0].toUpperCase()).join('');
-    }
-    return '??';
+function getUser () {
+    return {
+        name: 'Jon Doe',
+        email: 'jon@example.com',
+        getProfilePicture: function () {
+            return null;
+        },
+    };
 }
 ```
-Doesn't get any better, does it? Checks for non-existing (undefined) or null-values in JavaScript is an exhausting part of ones everyday workflow. The _Maybe Monad_ offers a Wrapper for values hence you can skip these checks for non-existing values.
+Accessing `url` on null will cause an Error. Hence we would rewrite the example as follows:
 ```js
-function getInitials (user) {
-  return Maybe.of(user)
-        .get(['person', 'name'])
-        .orDefault('? ?')
-        .chain(x => x.split(' ').map(n => n[0].toUpperCase()).join(''));
+let avatar = getUser().getProfilePicture();
+let url;
+if (avatar !== null) {
+    url = avatar.url;
+} else {
+    url = 'default.jpg';
 }
-getInitials(user) // 'JD'
-getInitials(null) // '??'
-getInitials({ id: 1 }) // '??'
 ```
+But what happens if there is no user logged in, e.g. the user is null? Let's check for that case too:
+```js
+let user = getUser();
+let avatar, url;
+
+if (user !== null) {
+    avatar = user.getProfilePicture();
+
+    if (avatar !== null) {
+        url = avatar.url;
+    } else {
+        url = 'default.jpg';
+    }
+}
+```
+Doesn't get any better, does it? Checks for non-existin or null-values in JavaScript is an exhausting part of ones everyday workflow. The _Maybe Monad_ offers a Wrapper for values hence you can skip these checks.
+```js
+Maybe.of(getUser())
+    .map(x => x.getProfilePicture())
+    .get('url')
+    .orDefault('default.jpg')
+    .value();
+```
+If any intermediate value is null/undefined, the chain returns `Maybe.nothing` instead of throwing an error.
 
 ## Getting started
 There are three ways supported for using Maybe:
