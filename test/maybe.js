@@ -8,7 +8,7 @@ if (process.env.MAYBE_COV) {
         });
 
         it('should load module', function () {
-            Maybe = require('../lib-cov/maybe');
+            Maybe = require('../dist-cov/maybe');
         });
     });
 }
