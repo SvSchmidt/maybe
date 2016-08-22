@@ -34,9 +34,11 @@ describe('Maybe', function() {
           expect(Maybe({}).get('address').get('street').orDefault('no street').join()).to.be.equal('no street');
           expect(Maybe.of({}).get('address').get('street').orDefault('no street').join()).to.be.equal('no street');
        });
+
        it ('Maybe.of(function) should return MaybeFunction instead of Maybe', function () {
-          expect(Maybe.of(function () { }).toString()).to.be.equal('[object MaybeFunction]');
+          expect(Maybe.of(x => x).toString()).to.be.equal('MaybeFunction(x => x)');
        });
+
        it('Maybe.of(Maybe) should return original Maybe (not nested ones)', function () {
           expect(Maybe.of(Maybe.of(1))).to.be.deep.equal(Maybe.of(1));
           expect(Maybe.of(Maybe.of(Maybe.of(1)))).to.be.deep.equal(Maybe.of(1));
@@ -184,8 +186,19 @@ describe('Maybe', function() {
        });
    });
 
-   it('toString() should be [object Maybe]', function () {
-       expect(Maybe.of(1).toString()).to.be.equal('[object Maybe]');
+   describe('toString', function () {
+       it('should be Maybe(value.toString())', function () {
+           expect(Maybe.of(1).toString()).to.be.equal('Maybe(1)');
+           expect(Maybe.of({}).toString()).to.be.equal('Maybe([object Object])');
+       });
+
+       it('should be Maybe(nothing) for Maybe.nothing', function () {
+           const nothingStr = 'Maybe(nothing)';
+
+           expect(Maybe.of(null).toString()).to.be.equal(nothingStr);
+           expect(Maybe.of(NaN).toString()).to.be.equal(nothingStr);
+           expect(Maybe.of(undefined).toString()).to.be.equal(nothingStr);
+       });
    });
 });
 
@@ -211,8 +224,28 @@ describe('MaybeFunction', function () {
          expect(Maybe.of((x, y) => x + y).apply(2, Maybe.of(4))).to.be.deep.equal(Maybe.of(6));
       });
 
-      it('toString() should be [object MaybeFunction]', function () {
-          expect(Maybe.of(x => 2 * x).toString()).to.be.equal('[object MaybeFunction]');
+      it('toString() should be MaybeFunction(value)', function () {
+          expect(Maybe.of(x => 2 * x).toString()).to.be.equal('MaybeFunction(x => 2 * x)');
       });
    });
+});
+
+describe('MaybeStatic', function () {
+    describe('Maybe.isMaybe', function () {
+        it('should return true for Maybe and MaybeFunction', function () {
+            expect(Maybe.isMaybe(Maybe.of(1))).to.be.true;
+            expect(Maybe.isMaybe(Maybe.of(x => x))).to.be.true;
+            expect(Maybe.isMaybe(Maybe.nothing)).to.be.true;
+        });
+
+        it('should return false for non-maybe values', function () {
+            expect(Maybe.isMaybe(1)).to.be.false;
+            expect(Maybe.isMaybe(x => x)).to.be.false;
+            expect(Maybe.isMaybe(null)).to.be.false;
+            expect(Maybe.isMaybe(undefined)).to.be.false;
+            expect(Maybe.isMaybe(NaN)).to.be.false;
+            expect(Maybe.isMaybe("Maybe I'll go to the park tomorrow")).to.be.false;
+            expect(Maybe.isMaybe("MaybeFunctions are great")).to.be.false;
+        });
+    });
 });

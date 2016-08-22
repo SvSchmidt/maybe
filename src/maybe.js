@@ -190,7 +190,11 @@
              * @override
              */
             function toString () {
-                return '[object Maybe]';
+                if (this.isNothing()) {
+                    return 'Maybe(nothing)';
+                }
+
+                return `Maybe(${Object(this[__value]).toString()})`;
             }
 
             return {
@@ -241,7 +245,7 @@
              * @override
              */
             function toString () {
-                return '[object MaybeFunction]';
+                return `MaybeFunction(${this[__value].toString()})`;
             }
 
             return {
@@ -275,7 +279,7 @@
 
         // Helper method to determine if a value represents a Maybe
         result.isMaybe = Maybe.isMaybe = function (value) {
-            return /maybe/i.test(Object(value).toString());
+            return /(^Maybe\(|^MaybeFunction\()/.test(Object(value).toString());
         }
 
         // Shorthand for Maybe.of(null) for not needing to create it multiple times

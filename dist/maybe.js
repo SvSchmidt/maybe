@@ -199,7 +199,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * @override
          */
         function toString() {
-            return '[object Maybe]';
+            if (this.isNothing()) {
+                return 'Maybe(nothing)';
+            }
+
+            return 'Maybe(' + Object(this[__value]).toString() + ')';
         }
 
         return {
@@ -255,7 +259,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * @override
          */
         function toString() {
-            return '[object MaybeFunction]';
+            return 'MaybeFunction(' + this[__value].toString() + ')';
         }
 
         return {
@@ -289,7 +293,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     // Helper method to determine if a value represents a Maybe
     result.isMaybe = Maybe.isMaybe = function (value) {
-        return (/maybe/i.test(Object(value).toString())
+        return (/(^Maybe\(|^MaybeFunction\()/.test(Object(value).toString())
         );
     };
 
