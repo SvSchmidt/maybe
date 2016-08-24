@@ -2,7 +2,6 @@
 
 const expect = require('chai').expect;
 const isCoverage = !!process.env.MAYBE_COV;
-const dist = isCoverage ? 'dist-cov' : 'dist';
 let Maybe = require('../dist/maybe');
 
 if (isCoverage) {
@@ -20,7 +19,7 @@ if (isCoverage) {
 describe('Module loading', function () {
     describe('CommonJS', function () {
         it('Should load module properly via CommonJS', function () {
-            let MaybeCommon = require(`../${dist}/maybe`);
+            let MaybeCommon = isCoverage ? require('../dist-cov/maybe') : require('../dist/maybe');
             expect(MaybeCommon).to.be.deep.equal(Maybe);
         });
     });
@@ -30,7 +29,7 @@ describe('Module loading', function () {
 
         requirejs.config({
             paths: {
-              maybe: `../../../../../${dist}/maybe`
+              maybe: isCoverage ? `../../../dist-cov/maybe` : '../../../../../dist/maybe'
             }
         });
 
