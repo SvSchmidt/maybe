@@ -4,7 +4,7 @@
   "description": "A simple library providing Maybe Monads for JavaScript",
   "main": "src/maybe.js",
   "scripts": {
-    "test": "MAYBE_COV=1 node_modules/.bin/mocha --ui bdd --reporter mocha-lcov-reporter ./test | ./node_modules/.bin/coveralls",
+    "test": "grunt build && MAYBE_COV=1 node_modules/.bin/mocha --ui bdd --reporter mocha-lcov-reporter ./test | ./node_modules/.bin/coveralls",
     "build": "grunt"
   },
   "repository": {

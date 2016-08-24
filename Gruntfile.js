@@ -5,7 +5,7 @@ module.exports = function (grunt) {
           ' * Maybe v<%= pkg.version %>\n' +
           ' * (c) <%= pkg.author %> \n' +
           ' * License: <%= pkg.licenses[0].type %> (<%= pkg.licenses[0].url %>)\n' +
-          ' */\n';
+          ' */';
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -81,5 +81,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-banner');
 
   grunt.registerTask('test', ['mochacli']);
-  grunt.registerTask('default', ['clean:dist', 'babel', 'uglify', 'usebanner', 'file_info', 'test', 'watch']);
+  grunt.registerTask('build', ['clean:dist', 'babel', 'uglify', 'usebanner', 'file_info']);
+  grunt.registerTask('default', ['build', 'test', 'watch']);
 };
