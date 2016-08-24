@@ -15,20 +15,30 @@ if (process.env.MAYBE_COV) {
     });
 }
 
-describe('Module loading', function() {
-    describe('CommonJS', function() {
-        it('Should load module properly via CommonJS', function() {
+describe('Module loading', function () {
+    describe('CommonJS', function () {
+        it('Should load module properly via CommonJS', function () {
             let MaybeCommon = require('../dist/maybe');
+            expect(MaybeCommon).to.be.deep.equal(Maybe);
         });
     });
 
-    describe('CommonJS', function() {
-        it('Should load module properly via requirejs', function() {
-            let requirejs = require('requirejs');
-            requirejs(['../dist/maybe'], function(MaybeRequirejs) {
-                it('required Maybe instance should be same as nodejs required', function() {
-                    expect(MaybeRequirejs).to.be.deep.equal(Maybe);
-                });
+    describe('RequireJS', function () {
+        let requirejs = require('requirejs');
+
+        requirejs.config({
+            paths: {
+              maybe: '../../../../../dist/maybe'
+            }
+        });
+
+        it('required Maybe instance should behave the same as previously required one by nodejs', function (done) {
+            requirejs(['maybe'], function (MaybeRequire) {
+                expect(MaybeRequire.of(1).prototype).to.be.deep.equal(Maybe.of(1).prototype);
+                expect(MaybeRequire.isMaybe(Maybe.of(1))).to.be.true;
+                expect(MaybeRequire.isMaybe(1)).to.be.false;
+                
+                done();
             });
         });
     });

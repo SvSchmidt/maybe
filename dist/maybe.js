@@ -17,7 +17,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // [3] good old <script>-tag
     if (typeof define === 'function' && define['amd']) {
         // AMD asynchronous module definition (e.g. requirejs)
-        define('Maybe', function () {
+        define(['require', 'exports'], function () {
             return Maybe;
         });
     } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && (typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object') {

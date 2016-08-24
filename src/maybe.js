@@ -8,7 +8,7 @@
     // [3] good old <script>-tag
     if (typeof define === 'function' && define['amd']) {
         // AMD asynchronous module definition (e.g. requirejs)
-        define('Maybe', function () { return Maybe; });
+        define(['require', 'exports'], function () { return Maybe; });
     } else if (typeof exports === 'object' && typeof module === 'object') {
         // CommonJS/Node.js where module.exports is for nodejs
         exports = module.exports = Maybe;
