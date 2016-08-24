@@ -15,6 +15,25 @@ if (process.env.MAYBE_COV) {
     });
 }
 
+describe('Module loading', function() {
+    describe('CommonJS', function() {
+        it('Should load module properly via CommonJS', function() {
+            let MaybeCommon = require('../dist/maybe');
+        });
+    });
+
+    describe('CommonJS', function() {
+        it('Should load module properly via requirejs', function() {
+            let requirejs = require('requirejs');
+            requirejs(['../dist/maybe'], function(MaybeRequirejs) {
+                it('required Maybe instance should be same as nodejs required', function() {
+                    expect(MaybeRequirejs).to.be.deep.equal(Maybe);
+                });
+            });
+        });
+    });
+});
+
 describe('Maybe', function() {
    describe ('construction', function () {
        it ('new Maybe(), Maybe.of() and Maybe() should behave the same', function () {

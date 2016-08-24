@@ -4,7 +4,7 @@
   "description": "A simple library providing Maybe Monads for JavaScript",
   "main": "src/maybe.js",
   "scripts": {
-    "test": "grunt build && MAYBE_COV=1 node_modules/.bin/mocha --ui bdd --reporter mocha-lcov-reporter ./test | ./node_modules/.bin/coveralls",
+    "test": "echo 'Starting build...' && grunt build && echo 'Starting tests...' && MAYBE_COV=1 node_modules/.bin/mocha --ui bdd --reporter mocha-lcov-reporter ./test | ./node_modules/.bin/coveralls",
     "build": "grunt"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "jscoverage": "^0.6.0",
     "load-grunt-tasks": "^3.5.2",
     "mocha": "^3.0.2",
-    "mocha-lcov-reporter": "^1.2.0"
+    "mocha-lcov-reporter": "^1.2.0",
+    "requirejs": "^2.2.0"
   }
 }
