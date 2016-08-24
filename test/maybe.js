@@ -1,9 +1,11 @@
 'use strict';
 
 const expect = require('chai').expect;
+const isCoverage = !!process.env.MAYBE_COV;
+const dist = isCoverage ? 'dist-cov' : 'dist';
 let Maybe = require('../dist/maybe');
 
-if (process.env.MAYBE_COV) {
+if (isCoverage) {
     describe('Test coverage', function () {
         it('should generate instrumentation', function (done) {
               require('child_process').exec('$(npm root)/.bin/jscoverage dist dist-cov', done);
@@ -18,7 +20,7 @@ if (process.env.MAYBE_COV) {
 describe('Module loading', function () {
     describe('CommonJS', function () {
         it('Should load module properly via CommonJS', function () {
-            let MaybeCommon = require('../dist/maybe');
+            let MaybeCommon = require(`../${dist}/maybe`);
             expect(MaybeCommon).to.be.deep.equal(Maybe);
         });
     });
@@ -28,7 +30,7 @@ describe('Module loading', function () {
 
         requirejs.config({
             paths: {
-              maybe: '../../../../../dist/maybe'
+              maybe: `../../../../../${dist}/maybe`
             }
         });
 
@@ -37,7 +39,7 @@ describe('Module loading', function () {
                 expect(MaybeRequire.of(1).prototype).to.be.deep.equal(Maybe.of(1).prototype);
                 expect(MaybeRequire.isMaybe(Maybe.of(1))).to.be.true;
                 expect(MaybeRequire.isMaybe(1)).to.be.false;
-                
+
                 done();
             });
         });
