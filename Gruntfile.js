@@ -69,7 +69,17 @@ module.exports = function (grunt) {
           dist: [ 'dist/*.js' ]
         }
       }
-    }
+    },
+    jshint: {
+      src: {
+        options: {
+            jshintrc: true,
+        },
+        files: {
+          src: ['src/maybe.js']
+        },
+      }
+    },
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -79,8 +89,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-file-info');
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-banner');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.registerTask('test', ['mochacli']);
   grunt.registerTask('build', ['clean:dist', 'babel', 'uglify', 'usebanner', 'file_info']);
-  grunt.registerTask('default', ['build', 'test', 'watch']);
+  grunt.registerTask('default', ['jshint', 'build', 'test', 'watch']);
 };

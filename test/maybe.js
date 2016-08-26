@@ -24,6 +24,13 @@ describe('Module loading', function () {
         });
     });
 
+    describe('Global', function () {
+        it('Should load module properly via global reference', function () {
+            let MaybeGlobal = isCoverage ? require('../dist-cov/maybe') : require('../dist/maybe');
+            expect(MaybeGlobal).to.be.deep.equal(Maybe);
+        });
+    });
+
     describe('RequireJS', function () {
         let requirejs = require('requirejs');
 

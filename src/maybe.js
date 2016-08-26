@@ -1,40 +1,32 @@
 (function (Maybe) {
-    // (0, eval)('this') is a robust way for getting a reference to the global object
-    const global = this || (0, eval)('this');
-
     // Support three ways to load the module
     // [1] AMD modules
     // [2] CommonJS/Node.js
     // [3] good old <script>-tag
-    if (typeof define === 'function' && define['amd']) {
+    if (typeof define === 'function' && define.amd) {
         // AMD asynchronous module definition (e.g. requirejs)
         define(['require', 'exports'], function () { return Maybe; });
-    } else if (typeof exports === 'object' && typeof module === 'object') {
+    } else if (!!exports && !!module && ('exports' in module)) {
         // CommonJS/Node.js where module.exports is for nodejs
         exports = module.exports = Maybe;
     } else {
         // no module loader (simple <script>-tag) -> assign Maybe directly to the global object
-        global['Maybe'] = Maybe;
+        // (0, eval)('this') is a robust way for getting a reference to the global object
+        (this || (0, eval)('this')).Maybe = Maybe; // jshint ignore:line
     }
 }((function () {
-        // use Symbol for saving the value in a private way
-        const __value = Symbol('value');
+        // use Symbol for saving the value in a private way or fallback to string
+        const __value = typeof Symbol === 'function' ? Symbol('value') : '__value';
 
         function __assign (target, origin) {
-            target = Object(target);
-
-            Object.keys(origin).forEach(k => {
-                let desc = Object.getOwnPropertyDescriptor(origin, k);
-                if (desc !== undefined && desc.enumerable) {
-                    Object.defineProperty(target, k, desc);
+            Object.keys(origin).forEach(key => {
+                const descriptor = Object.getOwnPropertyDescriptor(origin, key);
+                if (descriptor !== undefined && descriptor.enumerable) {
+                    Object.defineProperty(Object(target), key, descriptor);
                 }
             });
 
             return target;
-        }
-
-        function __copy (obj) {
-            return __assign({}, obj);
         }
 
         /**
@@ -101,13 +93,13 @@
               return Maybe.of(func(this[__value]));
             }
 
-            /**
-             * orDefault - Returns this or a Maybe of the provided fallback in case this.isNothing()
-             *
-             * @param  {any} fallback Value to fall back to in case this.isNothing()
-             * @return {Maybe}          this or new Maybe of the fallback
-             */
-            function orDefault (fallback) {
+             /**
+              * or - Returns this or a Maybe of the provided fallback in case this.isNothing()
+              *
+              * @param  {any} fallback Value to fall back to in case this.isNothing()
+              * @return {Maybe}          this or new Maybe of the fallback
+              */
+            function or (fallback) {
                 if (this.isNothing()) {
                     return Maybe.of(fallback);
                 }
@@ -116,17 +108,18 @@
             }
 
             /**
-             * or
+             * orDefault
              *
-             * @see {@link orDefault}
-             * @see orDefault
+             * @see {@link or}
+             * @see or
              */
-            function or (fallback) {
-                return this.orDefault(fallback);
+            function orDefault (fallback) {
+                return this.or(fallback);
             }
 
             /**
-             * get - Try to get the value associated with the property propOrProps or the array of properties in appropriate order or return Maybe.nothing if not available
+             * get - Try to get the value associated with the property propOrProps or the array of
+             *       properties in appropriate order or return Maybe.nothing if not available
              *
              * @param  {string} prop Name of the property to get
              * @return {Maybe}      new Maybe of the value associated with prop or Maybe.nothing
@@ -136,17 +129,15 @@
                     return this;
                 }
 
+                // [].concat() is a nifty way to make sure we're handling an actual array while still accepting non-array arguments
                 propOrProps = [].concat(propOrProps).reverse();
 
                 let maybeResult = this;
+
                 for (let result = this[__value];
                     !maybeResult.isNothing() && propOrProps.length > 0;
                     result = result[propOrProps.pop()],
                     maybeResult = Maybe.of(result)) {}
-
-                if (maybeResult.isNothing()) {
-                    return Maybe.nothing;
-                }
 
                 return maybeResult;
             }
@@ -199,7 +190,7 @@
 
             return {
                 isNull, isNaN, isUndefined, isNothing, map, orDefault, or, get, join, value, chain, toString,
-            }
+            };
         }());
 
         /**
@@ -250,9 +241,11 @@
 
             return {
                 apply, toString, join
-            }
+            };
         }());
-        MaybeFunction.prototype = __assign(__copy(Maybe.prototype), MaybeFunction.prototype);
+        // inherit from Maybe prototype
+        MaybeFunction.prototype = __assign(__assign({}, Maybe.prototype) /* copy object by assigning its properties to an empty object */,
+                                            MaybeFunction.prototype);
 
         // Return kind of a proxy to allow three ways to create Maybes:
         // [1] Maybe(value)
@@ -275,12 +268,12 @@
             }
 
             return new Maybe(value);
-        }
+        };
 
         // Helper method to determine if a value represents a Maybe
         result.isMaybe = Maybe.isMaybe = function (value) {
             return /(^Maybe\(|^MaybeFunction\()/.test(Object(value).toString());
-        }
+        };
 
         // Shorthand for Maybe.of(null) for not needing to create it multiple times
         result.nothing = Maybe.nothing = Maybe.of(null);
