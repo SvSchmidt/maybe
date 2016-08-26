@@ -1,5 +1,5 @@
 /*!
- * Maybe v1.0.0
+ * Maybe v1.1.0
  * (c) Sven Schmidt 
  * License: MIT (http://www.opensource.org/licenses/mit-license.php)
  */
