@@ -9,16 +9,18 @@
     // Support three ways to load the module
     // [1] AMD modules
     // [2] CommonJS/Node.js
-    // [3] good old <script>-tag
-    if (typeof define === 'function' && define.amd) {
-        // AMD asynchronous module definition (e.g. requirejs)
-        define(['require', 'exports'], function () {
-            return Maybe;
-        });
-    } else if (!!exports && !!module && 'exports' in module) {
-        // CommonJS/Node.js where module.exports is for nodejs
-        exports = module.exports = Maybe;
-    } else {
+    // [3] good old <script>-tag (fallback)
+    try {
+        if (typeof define === 'function' && define.amd) {
+            // AMD asynchronous module definition (e.g. requirejs)
+            define(['require', 'exports'], function () {
+                return Maybe;
+            });
+        } else if (exports && module && module.exports) {
+            // CommonJS/Node.js where module.exports is for nodejs
+            exports = module.exports = Maybe;
+        }
+    } catch (err) {
         // no module loader (simple <script>-tag) -> assign Maybe directly to the global object
         // (0, eval)('this') is a robust way for getting a reference to the global object
         (this || (0, eval)('this')).Maybe = Maybe; // jshint ignore:line
