@@ -1,6 +1,6 @@
 {
   "name": "maybe",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A simple library providing Maybe Monads for JavaScript",
   "main": "src/maybe.js",
   "scripts": {
