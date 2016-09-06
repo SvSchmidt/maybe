@@ -1,6 +1,8 @@
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
+  grunt.option('force', true);
+
   const banner = '/*!\n' +
           ' * Maybe v<%= pkg.version %>\n' +
           ' * (c) <%= pkg.author %> \n' +
@@ -43,7 +45,6 @@ module.exports = function (grunt) {
     },
     mochacli: {
         options: {
-            //require: ['chai'],
             reporter: 'nyan',
             bail: true
         },
@@ -70,28 +71,16 @@ module.exports = function (grunt) {
         }
       }
     },
-    jshint: {
+    standard: {
       src: {
-        options: {
-            jshintrc: true,
-        },
-        files: {
-          src: ['src/maybe.js']
-        },
+        src: [
+          'src/maybe.js'
+        ]
       }
-    },
+    }
   });
-
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks("grunt-babel");
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-file-info');
-  grunt.loadNpmTasks('grunt-mocha-cli');
-  grunt.loadNpmTasks('grunt-banner');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.registerTask('test', ['mochacli']);
   grunt.registerTask('build', ['clean:dist', 'babel', 'uglify', 'usebanner', 'file_info']);
-  grunt.registerTask('default', ['jshint', 'build', 'test', 'watch']);
+  grunt.registerTask('default', ['standard', 'build', 'test', 'watch']);
 };

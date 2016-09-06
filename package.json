@@ -34,6 +34,7 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-file-info": "^1.0.12",
     "grunt-mocha-cli": "^2.1.0",
+    "grunt-standard": "^2.0.0",
     "jscoverage": "^0.6.0",
     "load-grunt-tasks": "^3.5.2",
     "mocha": "^3.0.2",
